@@ -1,65 +1,40 @@
-%----------------------------------------------------------------------------------------
-%	EXAMPLE AND DOCUMENTATION OF THE KAOBOOK CLASS
-%----------------------------------------------------------------------------------------
-
+% Load the kaobook class
 \documentclass[
-	a4paper, % Page size
 	fontsize=10pt, % Base font size
-    twoside=true, % Use different layouts for even and odd pages (in particular, if twoside=true, the margin column will be always on the outside)
+	twoside=true, % Use different layouts for even and odd pages (in particular, if twoside=true, the margin column will be always on the outside)
 	%open=any, % If twoside=true, uncomment this to force new chapters to start on any page, not only on right (odd) pages
-	%chapterentrydots=true, % Uncomment to output dots from the chapter name to the page number in the table of contents
+	secnumdepth=1, % How deep to number headings. Defaults to 1 (sections)
 	numbers=noenddot, % Comment to output dots after chapter numbers; the most common values for this option are: enddot, noenddot and auto (see the KOMAScript documentation for an in-depth explanation)
 ]{kaobook}
 
-%----------------------------------------------------------------------------------------
-%	PACKAGES AND OTHER DOCUMENT CONFIGURATIONS
-%----------------------------------------------------------------------------------------
-
 % Choose the language
-\ifxetexorluatex
-	\usepackage{polyglossia}
-	\setmainlanguage[variant=mexican]{spanish}
-\else
-	\usepackage[spanish,mexico]{babel} % Load characters and hyphenation
-\fi
-\usepackage[autostyle]{csquotes}	% English quotes
+\usepackage[spanish,es-nosectiondot,mexico]{babel} % Load characters and hyphenation, the option -es-nosectiondot removes dots after the sections
+\usepackage[autostyle=true]{csquotes}
 
-% Load packages for testing
-%\usepackage{blindtext}
 %\usepackage{showframe} % Uncomment to show boxes around the text area, margin, header and footer
 %\usepackage{showlabels} % Uncomment to output the content of \label commands to the document where they are used
 
 % Load the bibliography package
-\usepackage{styles/kaobiblio}
+\usepackage{kaobiblio}
 \addbibresource{bib.bib} % Bibliography file
 
-% Load mathematical packages for theorems and related environments. NOTE: choose only one between 'mdftheorems' and 'plaintheorems'.
-\usepackage{styles/mdftheorems}
-%\usepackage{styles/plaintheorems}
+% Load mathematical packages for theorems and related environments
+\usepackage{kaotheorems}
 
 % Load the package for hyperreferences
-\usepackage{styles/kaorefs}
+\usepackage{kaorefs}
 
-% Sistema Internacional de Unidades
-\usepackage{siunitx}
-\DeclareSIUnit\Molar{\textsc{m}} % Unidades de molaridad
+% Carga el paquete para escribir unidades del SIU
+\usepackage{siunitx}[=v2] % La versión tres no admite Angstroms!!!
+\DeclareSIUnit\Molar{\textsc{m}}
 
-% Para reacciones químicas
+% Carga el paquete para escribir reacciones químicas
 \usepackage[version=4]{mhchem}
- 
-\graphicspath{imgs/} % Paths in which to look for images
+
+\graphicspath{./images} % Paths where images are looked for
 
 \makeindex[columns=3, title=Alphabetical Index, intoc] % Make LaTeX produce the files required to compile the index
 
-\makeglossaries % Make LaTeX produce the files required to compile the glossary
-\input{glossary.tex} % Include the glossary definitions
-
-\makenomenclature % Make LaTeX produce the files required to compile the nomenclature
-
-% Reset sidenote counter at chapters
-%\counterwithin*{sidenote}{chapter}
-
-%----------------------------------------------------------------------------------------
 
 \begin{document}
 
@@ -67,14 +42,12 @@
 %	BOOK INFORMATION
 %----------------------------------------------------------------------------------------
 
-%\titlehead{Lolo}
-%\subject{Lola}
+%\titlehead{Document Template}
 
-\title[Efecto del pH en el daño por radiación]{Efecto del pH en la condición de cristalización sobre el daño por radiación en cristales de proteína}
-%\subtitle{Customise this page according to your needs}
+\title[Efecto del pH en la condición de cristalización sobre el daño por radiación en cristales de proteína]{Efecto del pH en la condición de cristalización sobre el daño por radiación en cristales de proteína}
+% \subtitle{Subtitle}
 
 \author[FMP]{Francisco Murphy Pérez}
-
 \date{\today}
 
 %\publishers{An Awesome Publisher}
@@ -84,22 +57,6 @@
 \frontmatter % Denotes the start of the pre-document content, uses roman numerals
 
 %----------------------------------------------------------------------------------------
-%	OPENING PAGE
-%----------------------------------------------------------------------------------------
-
-%\makeatletter
-%\extratitle{
-%	% In the title page, the title is vspaced by 9.5\baselineskip
-%	\vspace*{9\baselineskip}
-%	\vspace*{\parskip}
-%	\begin{center}
-%		% In the title page, \huge is set after the komafont for title
-%		\usekomafont{title}\huge\@title
-%	\end{center}
-%}
-%\makeatother
-
-%----------------------------------------------------------------------------------------
 %	COPYRIGHT PAGE
 %----------------------------------------------------------------------------------------
 
@@ -107,29 +64,25 @@
 %\uppertitleback{\@titlehead} % Header
 
 \lowertitleback{
-%	\textbf{Disclaimer}\\
-%	You can edit this page to suit your needs. For instance, here we have a no copyright statement, a colophon and some other information. This page is based on the corresponding page of Ken Arroyo Ohori's thesis, with minimal changes.
-%	
+	%	\textbf{Disclaimer} \\
+	%	You can edit this page to suit your needs. For instance, here we have a no copyright statement, a colophon and some other information. This page is based on the corresponding page of Ken Arroyo Ohori's thesis, with minimal changes.
+	%	
 	\medskip
-%	
-%	\textbf{No copyright}\\
-%	\cczero\ This book is released into the public domain using the CC0 code. To the extent possible under law, I waive all copyright and related or neighbouring rights to this work.
-%	
-%	To view a copy of the CC0 code, visit: \\\url{http://creativecommons.org/publicdomain/zero/1.0/}
-%	
+	%	
+	%	\textbf{No copyright} \\
+	%	\cczero\ This book is released into the public domain using the CC0 code. To the extent possible under law, I waive all copyright and related or neighbouring rights to this work.
+	%	
+	%	To view a copy of the CC0 code, visit: \\\url{http://creativecommons.org/publicdomain/zero/1.0/}
+	%	
 	\medskip
 	
 	\textbf{Colofón} \\
-	Este documento se compuso con la ayuda de \href{https://sourceforge.net/projects/koma-script/}{\KOMAScript} and \href{https://www.latex-project.org/}{\LaTeX} usando la plantilla \href{https://github.com/fmarotta/kaobook/}{kaobook}.
-	
-%	The source code of this book is available at:\\\url{https://github.com/fmarotta/kaobook}
-	
-%	(You are welcome to contribute!)
+	Este documento se compuso con la ayuda de: \KOMAScript{} (\url{https://sourceforge.net/projects/koma-script/}) y \LaTeX{} (\url{https://www.latex-project.org/}), usando la plantilla denominada kaobook (\url{https://github.com/fmarotta/kaobook/}). 
 	
 	\medskip
 	
-%	\textbf{Publisher} \\
-%	First printed in May 2019 by \@publishers
+	%\textbf{Publisher} \\
+	%Primera versión mayo 2019%\@publishers
 }
 \makeatother
 
@@ -137,9 +90,10 @@
 %	DEDICATION
 %----------------------------------------------------------------------------------------
 
+
 \dedication{
-	A Lucía, por supuesto.\\
-	\flushright -- Con todo mi amor.
+	A Lucía, por supuesto.	
+	
 }
 
 %----------------------------------------------------------------------------------------
@@ -147,19 +101,14 @@
 %----------------------------------------------------------------------------------------
 
 % Note that \maketitle outputs the pages before here
-
-% If twoside=false, \uppertitleback and \lowertitleback are not printed
-% To overcome this issue, we set twoside=semi just before printing the title pages, and set it back to false just after the title pages
-\KOMAoptions{twoside=semi}
 \maketitle
-\KOMAoptions{twoside=false}
 
 %----------------------------------------------------------------------------------------
 %	PREFACE
 %----------------------------------------------------------------------------------------
 
-\input{chaps/resumen.tex}
-\index{preface}
+\input{./chaps/resumen}
+
 
 %----------------------------------------------------------------------------------------
 %	TABLE OF CONTENTS & LIST OF FIGURES/TABLES
@@ -170,7 +119,7 @@
 % Define the style for the TOC, LOF, and LOT
 %\setstretch{1} % Uncomment to modify line spacing in the ToC
 %\hypersetup{linkcolor=blue} % Uncomment to set the colour of links in the ToC
-\setlength{\textheight}{230\hscale} % Manually adjust the height of the ToC pages
+\setlength{\textheight}{230\vscale} % Manually adjust the height of the ToC pages
 
 % Turn on compatibility mode for the etoc package
 \etocstandarddisplaystyle % "toc display" as if etoc was not loaded
@@ -181,12 +130,10 @@
 \listoffigures % Output the list of figures
 
 % Comment both of the following lines to have the LOF and the LOT on different pages
-%\let\cleardoublepage\bigskip
-%\let\clearpage\bigskip
+\let\cleardoublepage\bigskip
+\let\clearpage\bigskip
 
 \listoftables % Output the list of tables
-
-
 
 \newacronym{api}{API}{Application Programming Interface }
 \newacronym{pdb}{PDB}{Protein Data Bank}
@@ -197,6 +144,7 @@
 \setglossarystyle{listgroup} % Set the style of the glossary (see https://en.wikibooks.org/wiki/LaTeX/Glossary for a reference)
 \printglossary[title=Acrónimos, toctitle=Acrónimos] % Output the glossary, 'title' is the chapter heading for the glossary, toctitle is the table of contents heading
 
+
 \endgroup
 
 %----------------------------------------------------------------------------------------
@@ -206,19 +154,26 @@
 \mainmatter % Denotes the start of the main document content, resets page numbering and uses arabic numbers
 \setchapterstyle{kao} % Choose the default chapter heading style
 
-\input{chaps/intro}
-%\input{chaps/antec}
-%\input{chaps/objet}
-%\input{chaps/mayme}
+\input{./chaps/introduccion}
+\input{./chaps/antecedentes}
+\input{./chaps/hipotesis}
+\input{./chaps/objetivos}
+\input{./chaps/materialesymetodos}
+\input{./chaps/resultados}
 
 %\pagelayout{wide} % No margins
-%\addpart{Class Options, Commands and Environments}
+%\addpart{Title of the Part}
 %\pagelayout{margin} % Restore margins
 
 \appendix % From here onwards, chapters are numbered with letters, as is the appendix convention
 
-%\input{chaps/apend}
-%\input{chaps/apend2}
+\input{./chaps/apendice01}
+%\input{./chaps/apendice02}
+
+%\pagelayout{wide} % No margins
+%\addpart{Apéndices}
+%\pagelayout{margin} % Restore margins
+
 
 %----------------------------------------------------------------------------------------
 
@@ -231,31 +186,11 @@
 
 % The bibliography needs to be compiled with biber using your LaTeX editor, or on the command line with 'biber main' from the template directory
 
-\defbibnote{bibnote}{Aquí se listan las citas en orden de aparición.\par\bigskip} % Prepend this text to the bibliography
-\printbibliography[heading=bibintoc, title=Bibliografía, prenote=bibnote] % Add the bibliography heading to the ToC, set the title of the bibliography and output the bibliography note
+\defbibnote{bibnote}{Listado de referencias por orden de aparición.\par\bigskip} % Prepend this text to the bibliography
+\printbibliography[heading=bibintoc, title=Referencias, prenote=bibnote] % Add the bibliography heading to the ToC, set the title of the bibliography and output the bibliography note
 
-%----------------------------------------------------------------------------------------
-%	NOMENCLATURE
-%----------------------------------------------------------------------------------------
-
-% The nomenclature needs to be compiled on the command line with 'makeindex main.nlo -s nomencl.ist -o main.nls' from the template directory
-
-%\nomenclature{$c$}{Speed of light in a vacuum inertial frame}
-%\nomenclature{$h$}{Planck constant}
-
-%\renewcommand{\nomname}{Notation} % Rename the default 'Nomenclature'
-%\renewcommand{\nompreamble}{The next list describes several symbols that will be later used within the body of the document.} % Prepend this text to the nomenclature
-
-%\printnomenclature % Output the nomenclature
-
-%----------------------------------------------------------------------------------------
-%	GLOSSARY
-%----------------------------------------------------------------------------------------
-
-% The glossary needs to be compiled on the command line with 'makeglossaries main' from the template directory
-
-%\setglossarystyle{listgroup} % Set the style of the glossary (see https://en.wikibooks.org/wiki/LaTeX/Glossary for a reference)
-%\printglossary[title=Special Terms, toctitle=List of Terms] % Output the glossary, 'title' is the chapter heading for the glossary, toctitle is the table of contents heading
+%\defbibnote{bibnote}{Here are the references in citation order.\par\bigskip} % Prepend this text to the bibliography
+%\printbibliography[heading=bibintoc, title=Bibliography, prenote=bibnote] % Add the bibliography heading to the ToC, set the title of the bibliography and output the bibliography note
 
 %----------------------------------------------------------------------------------------
 %	INDEX
@@ -264,19 +199,5 @@
 % The index needs to be compiled on the command line with 'makeindex main' from the template directory
 
 \printindex % Output the index
-
-%----------------------------------------------------------------------------------------
-%	BACK COVER
-%----------------------------------------------------------------------------------------
-
-% If you have a PDF/image file that you want to use as a back cover, uncomment the following lines
-
-%\clearpage
-%\thispagestyle{empty}
-%\null%
-%\clearpage
-%\includepdf{cover-back.pdf}
-
-%----------------------------------------------------------------------------------------
 
 \end{document}

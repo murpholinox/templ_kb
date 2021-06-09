@@ -1,0 +1,38 @@
+\chapter{Resultados}
+	\begin{enumerate}
+		\item Del análisis \emph{in silico} para determinar qué proteínas son capaces de cristalizar en un intervalo de pH amplio, se obtuvieron cinco proteínas con los siguientes identificadores de \verb|uniprot| \cite{Bateman2021}: \verb|P42212|, \verb|P00698|, \verb|P00760|, \verb|P00918|, \verb|P02766|. 
+		\item  Con respecto a la cristalización de las proteínas seleccionadas$\ldots$ 
+		\begin{itemize}
+		\item Se han puesto condiciones de cristalización con la lisozima (\verb|P00698|) y la tripsina (\verb|P00760|). Ambas conseguidas de manera comercial y sin procedimientos posteriores de purificación. 
+		
+		\item De los sistemas de amortiguadores de capacidad extendida desarrollados por Newman \cite{Newman2004}, se utilizó la primera condición de cristalización (denominada de ahora en adelante, C1): ácido succínico, glicina y sodio dihidrógeno fosfato monohidratado a una concentración de \SI{250}{\milli\Molar}. 
+		
+		\item Se realizaron experimentos de cristalización con la técnica modificada de \emph{microbatch}, propuesta por D'Arcy \emph{et al.} \cite{DArcy1996}. En estos experimentos, se varió la concentración de la proteína (15 o \SI{30}{\milli\gram\per\milli\liter}); la proporción entre aceites de parafina y silicona (1:0, 1:0.5, 1:1, 1:2 y 1:4); el pH (10, 9.5, 9.0, $\ldots$, 4.5) y finalmente, también se cambió el porcentaje de cloruro de sodio (0, 3 y \SI{6}{\percent} p/v) en la condición de cristalización. Esto debido a que, en ciertas condiciones, se ha observado una dependencia del tamaño de los cristales de lisozima obtenidos con respecto a la concentración de cloruro de sodio \cite{Svanidze2005}. Se usaron placas de cristalización de Terasaki Greiner de \num{72} pozos. Esto permite tres corridas de pH, con tres porcentajes de cloruro de sodio por duplicado. Cabe destacar que en cada placa la proporción de aceites es diferente. En total, se tienen \num{720} experimentos (\num{1440}, tomando en cuenta los duplicados). Esto último, tiene que ver con la reproducibilidad de los resultados de los experimentos de cristalización, pues no siempre son idénticos.
+		
+		\item Para clasificar los resultados de cristalización, se usó un esquema de clasificación modificado a partir del esquema de Bruno \emph{et al.} \cite{Bruno2018}. La clasifiación es la siguiente: 1 (cristales), 0.5 (cristales pequeños), 0 (gota clara), -1 (precipitado) y -2 (otros). Se tomaron tres fotos con una cámara USB acoplada a un microscopio óptico en los días quinto, noveno y décimosexto. Esto significa que se visualizaron y clasificaron \num{4320} fotos. Los resultados se definieron como positivos si se presentan cristales, en al menos uno de los dos experimentos, en los siguientes valores de pH 10, 9, 7.5, 5.0 y 4.5; de lo contrario, se consideran como resultados negativos. Para la tripsina, por lo menos al momento del día de la tercera foto, todos los resultados fueron negativos. Los resultados positivos para la lisozima se resumen a continuación.
+		
+		
+		\begin{table}[h]
+			\centering
+			\begin{tabular}{@{}llll@{}}
+				\toprule
+				Proteína & Concentración & \% p/v NaCl & AP:AS \\ \midrule
+				Lisozima & 15 & 3 & 1:1 \\
+				Lisozima & 15 & 3 & 1:4 \\
+				Lisozima & 15 & 6 & 1:4 \\
+				Lisozima & 30 & 3 & 1:1 \\
+				Lisozima & 30 & 6 & 1:1 \\
+				Lisozima & 30 & 3 & 1:2 \\
+				Lisozima & 30 & 6 & 1:2 \\
+				Lisozima & 30 & 3 & 1:4 \\
+				Lisozima & 30 & 6 & 1:4 \\ \bottomrule
+			\end{tabular}
+			\caption{Condiciones de cristalización exitosas para la lisozima. AP y AS significan aceite de parafina y silicona, respectivamente.}
+			\label{tab:my-table}
+		\end{table}
+	\end{itemize}
+
+	\item Con respecto a determinar los parámetros de la colecta de datos que produzcan niveles similares, o idénticos, de dosis de radiación absorbida, se escribió un programa en el lenguaje de programación \verb|bash| que permite obtener la dosis de radiación absorbida,  calculada por \verb|raddose| \cite{Bury2018}. Por simplicidad, se determinó un cristal hipotético de lisozima cúbico, con un volumen de \SI{1000000}{\cubic\angstrom}. Este presenta la misma composición atómica que la entrada \verb|1iee| del \verb|PDB|. También por simplicidad, el haz de rayos X se definió como colimado, con un corte de \num{100} x  \SI{100}{\micro\meter}, abarcando el área completa del cristal y un tiempo total de exposición de \SI{100}{\second}, con la obtención de un patrón de difracción por segundo. Dicho programa muestrea un flujo de fotones de 1.0 a \SI{100e11}{fotones\per\second} con un paso d \SI{0.1}{fotones\per\second} y una energía de 10.0 a \SI{17.2}{\kilo\electronvolt} con un paso de \SI{0.2}{\kilo\electronvolt}. Se obtuvo acceso al clúster \verb|groc| del grupo de genómica computacional del Instituto de Biotecnología de la UNAM\footnote{\url{https://biocomputo.ibt.unam.mx/}.}para correr dicho programa. Cabe aclarar que si bien los parámetros experimentales dados son idóneos, el fin de este programa es tener un estimado de la dosis por radiación absorbida en un sincrotrón de tercera generacion. Por otra parte, este primer programa sienta las bases para cualquier programa posterior en el que se necesite adaptar los parámetros experimentales a la realidad.
+	 
+	\item Con respecto a las colectas de datos, como primer acercamiento, se llevaron cinco\footnote{Crecidos a pH 10 (dos), 7.5 (uno) y 4.5 (dos).} cristales de lisozima al Laboratorio Nacional de Estructura de Macromoléculas (LANEM) del Instituto de Química (IQ) de la UNAM el 20 de mayo del presente año. En el LANEM-IQ, se tiene acceso a un generador de rayos X \verb|MicroMax-007 HF| de \verb|Rigaku|\footnote{\url{https://www.rigaku.com/products/sources/mm007}}. Hasta el momento, el único dato del que se tiene conocimiento es que la difracción de al menos uno de los cristales era mejor que \SI{1.6}{\angstrom}. 
+	\end{enumerate}

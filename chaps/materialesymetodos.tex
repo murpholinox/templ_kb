@@ -1,0 +1,83 @@
+\chapter{Materiales y métodos}
+\labch{mayme}
+
+El \acrshort{pdb} contiene información acerca de cientos de miles de proteínas cristalizadas en diferentes condiciones de cristalización. Para hallar qué proteínas pueden cristalizar en un amplio intervalo de pH se realizó un análisis \emph{in silico}, como se explica brevemente\sidenote{Con detalle en \url{https://github.com/murpholinox/doctorado}.} a continuación. 
+
+\subsection{Extracción de datos}
+%\sidenote{Actualmente la API fue reemplazada por una nueva versión cuyo desarrollo no ha sido completado \url{https://tinyurl.com/y84kuvs7}.}
+Se decidió emplear la información cruda del \acrshort{pdb}, es decir, extraer la información experimental necesaria directamente del cabezal de los archivos de las estructuras depositadas en el \acrshort{pdb}. La principal ventaja es que la extracción de información es de una manera más directa, sin depender de la interfaz de programación de aplicaciones (\acrshort{api}, por sus siglas en inglés) del mismo \acrshort{pdb}. Para extraer la información de los cabezales se usó el programa \Package{gemmi}\sidenote{Disponible en el siguiente enlace \url{https://github.com/project-gemmi/gemmi}.}. La información extraída es la siguiente: el contador de la entidad macromolecular, el tipo de entidad, el código de acceso de la base de datos de referencia\sidenote{La mayoría de las veces el código usado es aquél de la base de datos UniProt \url{https://www.uniprot.org/}.}, su descripción, el método experimental para crecer los cristales, el pH de la condición de cristalización, los detalles del experimento de la cristalización, la resolución final del modelo estructural, el grupo espacial en el que cristaliza la macromolécula y el identificador de objeto digital de la publicación científica correspondiente. A continuación se muestra un ejemplo de la información extraída:
+
+\begin{kaobox}[frametitle=Ejemplo 1]
+\begin{verbatim}
+6LU7,1,polypeptide(L),P0DTD1,main protease,EVAPORATION,\
+6,"2% polyethylene glycol (PEG) 6000, 3% DMSO, 1mM DTT,\
+0.1M MES buffer (pH 6.0), protein concentration 5mg/ml,\
+VAPOR DIFFUSION, HANGING DROP, temperature 293K",2.16,\
+2.16,C 1 2 1,10.1038/s41586-020-2223-y,21728,210031
+6LU7,2,polypeptide(L),P0DTD1,main protease,EVAPORATION,\
+6,"2% polyethylene glycol (PEG) 6000, 3% DMSO, 1mM DTT,\
+0.1M MES buffer (pH 6.0), protein concentration 5mg/ml,\
+VAPOR DIFFUSION, HANGING DROP, temperature 293K",2.16,\
+2.16,C 1 2 1,10.1038/s41586-020-2223-y,21728,210031
+\end{verbatim}
+\end{kaobox}
+
+El resultado final es una tabla de datos, con \num{226523} observaciones, o filas, y \num{14} variables, o columnas. El número de observaciones es mayor que el número de estructuras en el \acrshort{pdb}, esto es debido a que cada archivo puede tener más de una macromolécula\sidenote{Como es el caso del ejemplo 1.}. %La integridad de los datos se demuestra con una gráfica.
+
+\subsection{Limpieza de datos}
+Se aplican los siguientes filtros a los datos extraídos para eliminar observaciones que:
+
+\begin{enumerate}
+	\item Carecen de código de acceso.
+	\item Tienen una resolución peor que \SI{2}{\angstrom}. 
+	\item Carecen del valor de pH de la condición de cristalización.
+	\item El número de entidades es mayor o igual a dos.
+\end{enumerate}
+
+La lógica de los filtros es la siguiente: (\num{1} y \num{3}) Remover entradas que no tengan las anotaciones correspondientes\sidenote{Desafortunadamente la información experimental no siempre se encuentra disponible en los archivos del PDB.}, en este caso el código de acceso de la proteína y el pH de la condición de cristalización. La última es la anotación más relevante para este proyecto y la primera es la única manera de conocer casi inequívocamente la proteína representada en el archivo. (\num{2}) La resolución final del modelo estructural es un indicador de la calidad del cristal obtenido, a mayor resolución menos defectos posee el cristal. Este filtro garantizará que el listado de proteínas obtenidas sean fáciles de cristalizar. Además este filtro servirá para el análisis posterior, al comparar el daño por radiación específico, pues los resultados serán más confiables con una buena resolución. (\num{4}) Como se mencionó anteriormente, un archivo puede contener múltiples macromoléculas. Este filtro ayuda a descartar proteínas cristalizadas con otras. En general, las condiciones de cristalización para combinaciones diferentes de macromoléculas serán diferentes, por lo que no tiene caso tener varias observaciones de la misma proteína si presenta diferentes compañeros. 
+
+En la tabla \reftab{tab:top50}, se muestran las 50 proteínas más representadas en los datos que cumplen los primeros cuatros filtros. A partir de las cuales se aplican los siguientes dos filtros, que ayudan a eliminar las observaciones donde:
+
+\begin{enumerate}
+	\setcounter{enumi}{4}
+	\item Su secuencia de aminoácidos sea diferente de la secuencia consenso para cada conjunto de proteínas.
+	\item No presenten un intervalo de pH amplio en su cristalización.
+\end{enumerate}
+
+La lógica de estos dos filtros es la siguiente: (\num{5}) en el primer filtro se alegó que el código de acceso de UniProt es la manera de conocer \emph{casi inequívocamente la proteína representada}. En el caso de algunos virus, el código corresponde a un gen que puede codificar para diferentes proteínas. Debido a esto se realizó un alineamiento múltiple, con el programa \Package{mafft} \sidecite{Katoh2013},  para eliminar proteínas distintas a la respectiva secuencia consenso con el mismo código de acceso. A continuación se muestra un ejemplo:
+
+\begin{kaobox}[frametitle=Ejemplo 2]
+	\begin{verbatim}
+	6W4H,1,polypeptide(L),P0DTD1,SARS-CoV-2 NSP16,...
+	6W4H,2,polypeptide(L),P0DTD1,SARS-CoV-2 NSP16,...
+	6W6Y,1,polypeptide(L),P0DTD1,SARS-CoV-2 NSP3,...
+	6WQD,1,polypeptide(L),P0DTD1,SARS-CoV-2 NSP7,...
+	6WQD,2,polypeptide(L),P0DTD1,SARS-CoV-2 NSP7,...
+	7BUY,1,polypeptide(L),7BUY,SARS-CoV-2 virus Main protease,
+	\end{verbatim}
+\end{kaobox}
+
+Es claro que el código, \texttt{P0DTD1}, es el mismo; sin embargo, las observaciones corresponden a diferentes proteínas. Este filtro ayuda a mantener proteínas en las que su secuencia no difiera entre sí por más de 15 aminoácidos. Se mantienen entonces proteínas que difieran entre sí por la etiqueta de polihistidinas, pero se excluyen proteínas que contengan el péptido señal y proteínas quimeras, por ejemplo. Y (\num{6}) es la condición experimental que nos interesa en este proyecto, proteínas que cristalicen en un amplio intervalo de pH. Este filtro se aplicó por partes. Primero se realizó un gráfico de caja para cada una de las 50 proteínas más representadas en los datos. Este tipo de gráfica da una representación visual de la distribución de la variable en cuestión. Si la distribución no cubre al menos tres unidades de pH, entonces se descarta dicha proteína, en caso contrario se mantiene. De las proteínas restantes, 25, se realiza un histograma de frecuencias para determinar de manera cuantitativa la frecuencia con la que cada proteína ha sido cristalizada en valores de pH diferentes. Si la frecuencia no es mayor a cinco para la mayoría de las barras en cada histograma, la proteína se descarta, si no se mantiene (véase la \reffig{fig:vis-anal}). Esto resulta en un listado de 14 proteínas, donde las diez primeras entradas se presentan a continuación (véase la \reftab{tab:list}). 
+
+\begin{table}[h]
+	\centering
+	\begin{tabular}{@{}llll@{}}
+		\toprule
+		Número & Código & Intervalo       & Nombre                              \\ \midrule
+		1      & P00918 & 6               & Anhidrasa carbónica                 \\
+		2      & P00698 & 5.5             & Lisozima                            \\
+		3      & P00760 & 6               & Tripsina                            \\
+		4      & P02766 & 5               & Transtiretina                       \\
+		5      & P42212 & 6               & Proteína verde fluorescente         \\
+		6      & O60885 & 3.5             & Proteína bromodominio 4             \\
+		7      & P19491 & 4.5             & Receptor de glutamato 2             \\
+		8      & O26232 & 4               & Orotidina-5’-fosfato descarboxilasa \\
+		9      & P00772 & 4.5             & Elastasa                            \\
+		10     & P00644 & 3               & Termonucleasa                       \\\bottomrule
+	\end{tabular}
+	\caption[Proteínas que cristalizan en un intervalo amplio de pH]{Proteínas que cristalizan en un intervalo amplio de pH.}
+	\labtab{tab:list}
+\end{table}
+
+\section{Colecta y análisis de datos}
+Los cristales obtenidos serán difractados en un sincrotrón, midiendo la dosis de radiación absorbida. Para cada proteína se tendrán que realizar colectas de datos secuenciales de manera repetitiva. Gracias a la presencia de modelos estructurales en el \acrshort{pdb}, se puede estimar la dosis absorbida por la proteína antes de realizar el experimento de difracción. Esto se puede realizar gracias al programa \Package{raddose} \sidecite{Zeldin2013}. Se resolveran las estructuras por reemplazo molecular y se crearán mapas de diferencia de densidad electrónica para analizar la diferencia en daño por radiación específico a distintos pHs al mismo nivel de dosis de radiación absorbida. %Cabe señalar que la mayor parte del análisis posterior a la colecta de datos será \emph{in silico} y gracias al trabajo anterior se dispone de un flujo de trabajo semiautomático lo que facilitará en gran medida el presente proyecto.
